@@ -1,0 +1,61 @@
+---
+title: "Homework1"
+author: "Ryan Shea"
+date: "9/14/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Homework 1
+## Ryan Shea
+### I pledge my honor that I have abided by the Stevens Honor system.
+
+\newpage
+
+
+First we will import the necessary packages and data.
+```{r}
+library(ggplot2)
+library(gganimate)
+
+library(readr)
+# https://www.kaggle.com/datasets/datasnaek/chess
+dataf <- read_csv("Homeworks/games.csv")
+head(dataf, 4)
+```
+
+```{r}
+relevant_columns <- c("winner", "rated", "turns", "victory_status", "increment_code", "white_rating",
+                      "black_rating", "moves", "opening_name", "opening_ply")
+
+df <- dataf[relevant_columns]
+head(df, 3)
+```
+
+Now we will do some basic data manipulation in order to create new columns and features in the dataset.
+
+```{r}
+df$rating_diff <- df$white_rating - df$black_rating # If pos, white is better
+
+```
+
+```{r}
+ggplot(df, aes(rating_diff, turns)) + 
+  geom_point()
+  
+```
+```{r}
+ggplot(df, aes(rating_diff, turns))
+
+
+```
+
+
+
+
+
