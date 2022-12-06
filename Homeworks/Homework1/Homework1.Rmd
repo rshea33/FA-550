@@ -18,15 +18,17 @@ knitr::opts_chunk$set(echo = TRUE)
 \newpage
 
 
-First we will import the necessary packages and data.
+First we will import the necessary packages and data. I chose this chess data set because I have become interested in the game within the past year and would like to investigate some trends in the data set of over 20,000 games.
+
 ```{r}
 library(ggplot2)
-library(gganimate)
+library(gridExtra)
+
 
 library(readr)
 # https://www.kaggle.com/datasets/datasnaek/chess
-dataf <- read_csv("Homeworks/games.csv")
-head(dataf, 4)
+dataf <- read_csv("games.csv")
+colnames(dataf)
 ```
 
 ```{r}
@@ -40,22 +42,67 @@ head(df, 3)
 Now we will do some basic data manipulation in order to create new columns and features in the dataset.
 
 ```{r}
-df$rating_diff <- df$white_rating - df$black_rating # If pos, white is better
+df$rating_diff <- df$white_rating - df$black_rating # If positive, white is better
+df$average_rating <- (df$white_rating + df$black_rating) / 2
+
 
 ```
+
+
+\newpage
+
+The first visualization I will create will be investigating the relationship between the difference in rating and the total number of moves in the game. Because of that I will use a scatter plot with a high level of transparency (as it is a large data set) and layer on a density plot to illustrate it further.
 
 ```{r}
 ggplot(df, aes(rating_diff, turns)) + 
-  geom_point()
+  geom_point(alpha=0.1) +
+  geom_density2d(colour = 'red', alpha = 0.4) +
+  labs(
+    title = "Rating Difference Distribution Vs. Number of Moves",
+    x = "Turns",
+    y = "Rating Difference")
   
 ```
+This distribution is showing how as the rating increases, the average number of turns decreases which makes sense. It is more likely that the lower rated player will make more blunders and the higher rated player will capitalize on it quicker than someone their rating would.
+
+
+\newpage
+
+For our next visualization we will look at the average rating and the number of moves in the opening. I believe that as the rating increases the number of opening moves will increase as they know more chess theory and following the opening generally will put them at an advantage. The best way to see this is using a filled density chart and to add a trend line on the top.
+
 ```{r}
-ggplot(df, aes(rating_diff, turns))
+ggplot(df, aes(average_rating, opening_ply)) + 
+  geom_density2d_filled(h = c(100, 1.6)) +
+  labs(
+    title = "Average Rating vs Number of Opening Moves",
+    x = "Rating",
+    y = "Number of Opening Moves"
+  ) + 
+  geom_smooth(
+    color = 'red',
+    alpha = 0.8,
+    method = 'gam'
+    )
 
 
 ```
+According to this density chart, you can see a slight increase in the opening moves as the rating increases (up until about 1500).
+This makes sense as it slightly goes down after that where they might see a mistake most people would miss and might ditch theory in order to capitalize. Even with the drop on density, you can still see there is a strong linear relationship between the rating of the two players and the number of opening moves.
 
+\newpage
 
+For the last visualization, I will investigate the outcomes of the games and see if whether or not the game being rated has to do with this outcome. I will use a bar chart for this as it will be easy to see the different outcomes (as factors) easily side by side.
 
+```{r}
+ggplot(df, aes(victory_status, fill = rated)) + 
+  geom_bar(position = 'dodge') + 
+  labs(
+    title = "The Outcome of Games",
+    x = "Type of Ending",
+    y = "Count"
+  )
+```
+
+The vast majority of games end in resignation whether or not it is rated. You can see that clearly in the bar chart and it seems like whether or not it is rated does not matter in predicting the type of ending.
 
 

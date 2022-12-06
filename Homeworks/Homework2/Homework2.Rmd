@@ -1,0 +1,144 @@
+---
+title: "An Analysis of Aaron Judge's Homeruns"
+author: "Ryan Shea"
+output:
+  html_document:
+    toc: True
+    toc_float: True
+---
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+<div style="margin-bottom:150px;">
+</div>
+
+# Overview
+
+![Source: NPR, 2022](https://media.npr.org/assets/img/2022/10/04/gettyimages-1243732454-27679070c5e9b8ec7e910543f37d86c13d6d3063-s1100-c50.jpg){#id .class width=50% height=50%}
+
+Aaron Judge has just recently broke the single-season AL home run record, hitting his 62nd and surpassing Roger Maris in the process. As a tribute to this accomplishment, I have decided to take a look at all of his home runs throughout his career. As a baseball player myself I understand how impressive of a feat that is which made me decide to pick this dataset to visualize.
+
+My goal is to provide insights about what kind of hitter Judge is through complex visualizations of the data.
+
+```{r libraries, include = FALSE, echo = FALSE}
+library(ggplot2)
+library(ggalt)
+```
+
+<div style="margin-bottom:100px;">
+</div>
+
+# Preprocessing
+
+First, we must load the data and make a few changes to some of the features in order for describe it better in the visualizations. The link to the data can be found [here](https://baseballsavant.mlb.com/statcast_search?hfPT=&hfAB=home%5C.%5C.run%7C&hfGT=R%7CPO%7CF%7CD%7CL%7CW%7CA%7C&hfPR=hit%5C.%5C.into%5C.%5C.play%7Chit%5C.%5C.into%5C.%5C.play%5C.%5C.no%5C.%5C.out%7Chit%5C.%5C.into%5C.%5C.play%5C.%5C.score%7Cpitchout%5C.%5C.hit%5C.%5C.into%5C.%5C.play%5C.%5C.score%7C&hfZ=&hfStadium=&hfBBL=&hfNewZones=&hfPull=&hfC=&hfSea=2022%7C2021%7C2020%7C2019%7C2018%7C2017%7C2016%7C2015%7C&hfSit=&player_type=pitcher&hfOuts=&hfOpponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=&game_date_lt=&hfMo=&hfTeam=&home_road=&hfRO=&position=&hfInfield=&hfOutfield=&hfInn=&hfBBT=&batters_lookup%5B%5D=592450&hfFlag=&metric_1=&group_by=name&min_pitches=0&min_results=0&min_pas=0&sort_col=pitches&player_event_sort=api_p_release_speed&sort_order=desc#results).
+
+```{r data, echo = TRUE}
+df <- read.csv('savant_data.csv')
+
+df$plate_x <- df$plate_x * 12 # Change from feet to inches
+df$plate_z <- df$plate_z * 12 # Change from feet to inches
+df$total_up <- df$bat_score - df$fld_score # Higher the number the more they are winning by
+df$change_win_exp <- abs(df$delta_home_win_exp) # Can take the absolute value because it will always increase their chances of winning
+
+```
+
+<div style="margin-bottom:100px;">
+</div>
+
+# Homerun Exit Velo With Respect to Pitch Location
+
+The first exploration we will do is to see where in the zone he hits the ball the hardest. We will accomplish this by plotting the location that it crosses the plate for each home run, and map the color to the exit velocity so if it is harder hit, it is darker and stands out more. We will also estimate the strike zone with a black box.
+
+```{r pitch_ev, warning=FALSE}
+ggplot(
+  df,
+  mapping = aes(
+    x = plate_x,
+    y = plate_z,
+    color = launch_speed)) +
+  scale_color_gradient(low = 'red', high = 'darkred') +
+  geom_point(size = 2, alpha = 0.7) + 
+  geom_rect(aes(
+    xmin = -(17/2),
+    xmax = 17/2,
+    ymin = 20,
+    ymax = 46
+  ), alpha = 0,
+  color = 'black') +
+  xlim(-18, 18) +
+  ylim(15, 50) + 
+  theme_classic() + 
+  ggtitle("Judge's Pitch Location and Exit Velocity for Homeruns")+
+  xlab("Distance from Center of Zone (In.)") + 
+  ylab("Distance From Ground (In.)")
+```
+
+You can see that the vast majority of his home runs are pitches that are right down the middle. That is to be expected as he is an elite hitter that will punish bad pitches at a very high rate.
+
+Also, as a righty you can see that he tends to hit the ball on the left side of the zone more (he is a pull hitter). More of the balls that are on the inside part of the zone are generally harder which shows he gets his hands to extension really well and can hit for power more on that side.
+
+<div style="margin-bottom:100px;">
+</div>
+
+# How Does he do with Respect to the Difference in Score?
+
+Our next visualization will seek to see if the difference in score is a factor in how often he hits home runs.
+
+
+```{r diff_in_score}
+ggplot() + 
+  geom_histogram(
+    mapping = aes(df$total_up),
+    color = '#C4CED3',
+    fill = '#003087', # Yankees colors
+    bins = 19
+  ) + 
+  xlab("Total Difference in Score") + 
+  ylab("Count") + 
+  theme_bw() +
+  theme_update(plot.title = element_text(hjust = 0.5)) +
+    labs(
+    title = "Number of Homeruns Compared to the Difference in Score",
+    caption = "A positive difference in score\nimplies the Yankees are winning."
+  ) 
+```
+
+From the histogram, you can see that there is a slightly positive skew toward the right which makes sense. This can be explained by the fact that they could have momentum leading up to his at bat.
+
+<div style="margin-bottom:100px";>
+</div>
+
+# Change in Win Expectancy for Each Pitch Type
+
+For our final graph we will look to see if the certain pitch type has something to do with the change in win expectancy. It could give an idea as to which pitches he does the best against, and which are thrown to him the most in game changing moments. If there is a larger change in win expectancy it implies that it is late in a close game and he came in clutch.
+
+```{r, warning = FALSE}
+ggplot(df, aes(
+  x = pitch_type,
+  y = change_win_exp
+)) +
+  geom_violin(
+    color = '#003087',
+    fill = '#C4CED3'
+    ) +
+  geom_jitter(
+    size = 0.4,
+    color = '#003087',
+    width = 0.23,
+    alpha = 0.7
+    ) + 
+  theme_minimal() + 
+  ggtitle("Change in Win Expectancy by Pitch Type") + 
+  xlab("Pitch Type") + 
+  ylab("Change in Win Probability")
+```
+
+From the violin plot you can see that most of the pitches he sees are "FF", or fastballs. This is to be expected as it is the most popular pitch and at least one of the pitches will be a fastball in the vast majority of at bats. The density plot makes sense as it is distributed the most evenly out of all of them.
+
+The SL, or slider, has the largest outlier at just over 0.8 change in win probability. As this is a smaller sample size this could be by chance. Otherwise, this most likely has the second most.
+
+CH (Changeup) is interesting because there are a lot of instances, but there are no occurrences that are near 0.0. This says that that pitch is utilized against him in closer games.
