@@ -1,0 +1,76 @@
+---
+title: "Final Project Proposal"
+author: "Ryan Shea"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## My Questions
+
+For my final project I would like to investigate a few different questions regarding specific questions regarding MLB baseball.
+
+#### 1. What attributes are most important in an effective slider? (Which quantitative statistics are the highest predictors)
+
+This question is at its root a binary classification problem. A pitch is either executed or it is not. I will look to see which of the features has the largest impact on the prediction of the model. I chose a slider specifically because I am attempting to learn one for myself as a collegiate pitcher so I may be able to utilize this information for myself.
+ 
+#### 2. Which counts are generally the most important counts in terms of winning games?
+
+This question stems from a [passion project](https://github.com/rshea33/pitch-execution) that I did a while ago where I attempted to predict the best pitch in each count using the same datasets. That being said, it is incredibly different as I am going to use the change in win expectancy as the main trend instead of a classification problem, and it is just something that could be interesting to know.
+ 
+#### 3. How do the different parts of the season (months) affect certain statistics of the game (batting average, pitch velocity, etc.)?
+
+I like this question because it lets me see if many of the Division III trends translate over to the MLB. Velocity is something that starts out much lower in the beginning of the spring and ramps up as it gets warmer and pitcher's arms loosens. This is something that I would like to investigate at the highest level.
+
+## Data Collection / Methodology
+
+For the data needed for this project I will be able to collect it all from [Baseball Savant](https://baseballsavant.mlb.com/statcast_search). This website is basically a high level SQL query for all of the data. I can customize the queries exactly to what I need. For example, I can pick certain sliders from certain pitchers that are down in the zone in a 1-2 count: it is good because it gets every MLB pitch while being easy to use/query.
+
+The methodology for this project is important as well, and varies slightly depending on whichever question I am attempting to answer. For question 1, Baseball Savant has a feature that shows a quick clip of every pitch in the database, so I will manually label each pitch if it is executed or not (1 or 0). In the past I have written a function that looks at outcome, location of pitch, count, etc. but it willnot work as well as someone that has pitched at a high level looking at all of the factors leading up to each pitch since it would take forever to code every edge case.
+
+For Question 2 this will not take as much manual work. I will make a query for each count (0-0, 0-1, 0-2, 1-0, 1-1, ..., 3-1, 3-2) and take the average change in win expectancy as a major predictor to answer the question. This could be an interesting question to see if things change in playoffs or anything like that if I have time. I would expect the largest difference to be in 2 strike counts but it is an interesting question.
+
+I like Question 3 because I can relate to it. Velocity in the colder weather is down but so is batting average, at least at the DIII level. I'm thinking for velocity I use one season as a case study where I select only fastballs. This would be more than enough data since there is a massive variance of pitchers that throw in a season, and this allows me to take one single season as a fair sample to predict the trend for any season. Plus, there is more than enough data as each season has generally over 700,000 pitches in it. If I have time to do average as well I can use a similar query that gets pitches that result in a hit, out, walk and compute the average for each day.
+
+## Tools to Use
+
+I plan on using a variety of tools for not just visualizations as well.
+
+#### 1. Python
+
+I am incredibly comfortable in Python especially for data preprocessing and machine learning so I will be leveraging packages such as NumPy and Pandas for preprocessing, XGBoost for machine learning, and Scikit-Learn for both. Sklearn has many classes that help out with preprocessing, standardization/normalization and NumPy and Pandas work seamlessly together for any manual computations I might have to make as well.
+
+For the actual prediction parts I need a classification algorithm for Question 1 and I have had a lot of success leveraging Sklearn's Support Vector Classifier, as it specifically does a good job dividing the different values in a multi-dimensional space. I also really like Gradient Boosted Decision Trees for regression problems and would like to see if it can get a better testing accuracty than the SVC.
+
+Many of the questions are looking at how trends change over time, and this is not necessarily a linear change. I need an algorithm that would be able to capture this well without overfitting, so right now I am considering a Support Vector Regressor, Gaussian Process or something similar, all of which I can use with sklearn. After that I will use SHAP in order to determine feature importance. They also have decent visualizations that are backended in Matplotlib as well.
+
+Also, I have a good amount of experience with Matplotlib and Seaborn for data visualization so there is a chance I will use Python for these packages as well.
+
+#### 2. R
+
+From this class I have gotten a lot more comfortable using ggplot for visualization. I very rarely used it before this and did most of my visualization in Python (Matplotlib and Seaborn as I have already said) but I feel as though I have gotten arguably *more* comfortable in ggplot because of this class. I will most likely make a lot of my actual visualizations in R, and I may use RMarkdown to help with the flow of information. I haven't quite decided if I am going to do this or a Tableau story as they are both strong tools for creating stories and keeping a flow in data.
+
+#### 3. Tableau
+
+As I said I may or may not use Tableau for tying everything together. I might make the information in an rmd file and then copy-paste it into a Tableau story and see which one I like more. I am hesitating using Tableau as the end-all-be-all because I feel like the stories can sometimes feel like glorified PowerPoints where an HTML file can be more put together. Obviously they are both situational (PowerPoint style would make more sense in a full presentation while a webpage is better for someone individually looking at the data) but it will be a decision I make in the future when I have all of my visualization and have completed my story.
+
+That being said, I will most likely utilize Tableau in order to see how average fastball velocity, for example, changes depending on where they are through the usage of a map plot. There is not the city in where the games are played; however, I could just map the city to the corresponding home team. There could be a big difference in average velocity depending on if they are in the south or up north. This could be used as an interactive plot as a function of time and could be very interesting to incorporate in my project.
+
+## Times
+
+- 2022-11-16: Submit Proposal
+
+- 2022-11-25: Finish collecting, cleaning data, start ML models
+
+- 2022-12-01: Finish Models, start visualizing results
+
+- 2022-12-18 Submit Final Project
+
+
+
+
+
