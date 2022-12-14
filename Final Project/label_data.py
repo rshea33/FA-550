@@ -4,39 +4,29 @@ from preprocess import clean
 from sys import argv
 import xgboost as xgb
 
-
 import warnings
 warnings.filterwarnings('ignore')
+
+def label_data(df, model):
+    m = xgb.Booster()
+    m.load_model(model)
+    df = clean(df)
+    cleaned_df = df.copy()
+    df = xgb.DMatrix(df)
+    pred = m.predict(df)
+    cleaned_df.insert(0, 'executed', pred)
+    return cleaned_df
+
 
 def main():
     if len(argv) != 4:
         print('Usage: python label_data.py [model] [input_csv] [output_csv]')
         exit(1)
+    
+    data = label_data(pd.read_csv(argv[2]), argv[1])
 
-    # load the model
-    model = xgb.Booster()
-    model.load_model(argv[1])
-    print(f"Loaded model from {argv[1]}")
-
-    # load the data
-    df = pd.read_csv(argv[2])
-    print(f"Loaded data from {argv[2]}")
-    df = clean(df)
-    cleaned_df = df.copy()
-    print("Cleaned data")
-    # Convert to DMatrix
-    df = xgb.DMatrix(df)
-    print("Converted to DMatrix")
-    pred = model.predict(df)
-    print("Predicted")
-
-
-    cleaned_df.insert(0, 'executed', pred)
-    print("Added predictions to dataframe")
-
-
-    cleaned_df.to_csv(argv[3], index=False)
-    print(f"Saved to {argv[3]}")
+    data.to_csv(argv[3], index=False)
+    print(f"Labelled data saved to {argv[3]}")
 
 if __name__ == '__main__':
     main()

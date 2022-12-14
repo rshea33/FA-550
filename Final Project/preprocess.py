@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sys import argv
+from sklearn.preprocessing import StandardScaler
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -40,8 +41,6 @@ def clean(df):
     data['p_throws'] = data['p_throws'].map({'R': 1, 'L': 0})
     data['type'] = data['type'].map({'S': 1, 'B': 0})
 
-    # check if there is a value for 'on_3b', 'on_2b', 'on_1b'
-    # if there is, set to 1, else set to 0
     data['on_3b'] = data['on_3b'].notnull().astype('int')
     data['on_2b'] = data['on_2b'].notnull().astype('int')
     data['on_1b'] = data['on_1b'].notnull().astype('int')
