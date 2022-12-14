@@ -24,7 +24,7 @@ def main(): # must import labelled data
     xgb_accuracy = accuracy_score(y_test, xgb_pred)
 
     
-    print(f"\n\nAccuracy: {xgb_accuracy}", end='\n\n')
+    print(f"\n\nAccuracy: {xgb_accuracy}", end='\n\n') # roughly 0.87
     print(f"Confusion Matrix:\n{confusion_matrix(y_test, xgb_pred)}", end='\n\n')
 
     # save model
