@@ -1,0 +1,7 @@
+pitches,player_id,api_game_date_month_text,total_pitches,pitch_percent,ba,iso,babip,slg,woba,xba,hits,abs,launch_speed,launch_angle,spin_rate,velocity,effective_speed,whiffs,swings,city
+1144,SF,Sep/Oct,4770,24.0,0.232,0.169,0.305,0.401,0.315,0.214,55,237,88.8,16.9,2238,93.4,93.47,140,560,"San Francisco, CA"
+1004,SF,Jun,3686,27.2,0.264,0.171,0.295,0.435,0.323,0.268,65,246,90.4,13.6,2200,93.8,93.61,115,551,"San Francisco, CA"
+941,SF,May,4037,23.3,0.29,0.186,0.344,0.476,0.36,0.258,61,210,87.6,13.7,2240,94.0,93.89,93,488,"San Francisco, CA"
+920,SF,Jul,4120,22.3,0.254,0.158,0.329,0.411,0.34,0.227,53,209,91.5,16.4,2263,94.1,93.86,112,462,"San Francisco, CA"
+827,SF,Mar/Apr,2935,28.2,0.222,0.124,0.27,0.346,0.286,0.227,41,185,89.0,14.7,2222,94.2,93.97,86,423,"San Francisco, CA"
+798,SF,Aug,4080,19.6,0.251,0.206,0.279,0.457,0.331,0.231,44,175,88.4,17.4,2240,93.2,93.25,94,404,"San Francisco, CA"

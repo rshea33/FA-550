@@ -1,4 +1,3 @@
-from preprocess import clean
 from label_data import label_data
 import pandas as pd
 
