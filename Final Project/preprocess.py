@@ -3,11 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sys import argv
 from sklearn.preprocessing import StandardScaler
+
 import warnings
 warnings.filterwarnings('ignore')
 
 def clean(df):
     relevant_columns = [ # Executed is removed as it is not a feature
+        'pitch_type',
         'release_speed',
         'release_pos_x',
         'release_pos_y',
