@@ -31,40 +31,40 @@ def clean_weather(path, df_name):
     df = df[relevant_columns]
 
     city_map = {
-        'ATL': 'Atlanta, GA',
-        'AZ': 'Phoenix, AZ',
-        'BAL': 'Baltimore, MD',
-        'BOS': 'Boston, MA',
-        'CHC': 'Chicago, IL',
-        'CIN': 'Cincinnati, OH',
-        'CLE': 'Cleveland, OH',
-        'COL': 'Denver, CO',
-        'CWS': 'Chicago, IL',
-        'DET': 'Detroit, MI',
-        'HOU': 'Houston, TX',
-        'KC': 'Kansas City, MO',
-        'LAA': 'Anaheim, CA',
-        'LAD': 'Los Angeles, CA',
-        'MIA': 'Miami, FL',
-        'MIL': 'Milwaukee, WI',
-        'MIN': 'Minneapolis, MN',
-        'NYM': 'New York, NY',
-        'NYY': 'New York, NY',
-        'OAK': 'Oakland, CA',
-        'PHI': 'Philadelphia, PA',
-        'PIT': 'Pittsburgh, PA',
-        'SD': 'San Diego, CA',
-        'SEA': 'Seattle, WA',
-        'SF': 'San Francisco, CA',
-        'STL': 'St. Louis, MO',
-        'TB': 'Tampa, FL',
-        'TEX': 'Arlington, TX',
-        'TOR': 'Toronto, ON',
-        'WSH': 'Washington, DC'
+        'ATL':[ 'Atlanta', 'GA'],
+        'AZ': ['Phoenix', 'AZ'],
+        'BAL':[ 'Baltimore', 'MD'],
+        'BOS':[ 'Boston', 'MA'],
+        'CHC':[ 'Chicago', 'IL'],
+        'CIN':[ 'Cincinnati', 'OH'],
+        'CLE':[ 'Cleveland', 'OH'],
+        'COL':[ 'Denver', 'CO'],
+        'CWS':[ 'Chicago', 'IL'],
+        'DET':[ 'Detroit', 'MI'],
+        'HOU':[ 'Houston', 'TX'],
+        'KC': ['Kansas City', 'MO'],
+        'LAA':[ 'Anaheim', 'CA'],
+        'LAD':[ 'Los Angeles', 'CA'],
+        'MIA':[ 'Miami', 'FL'],
+        'MIL':[ 'Milwaukee', 'WI'],
+        'MIN':[ 'Minneapolis', 'MN'],
+        'NYM':[ 'New York', 'NY'],
+        'NYY':[ 'New York', 'NY'],
+        'OAK':[ 'Oakland', 'CA'],
+        'PHI':[ 'Philadelphia', 'PA'],
+        'PIT':[ 'Pittsburgh', 'PA'],
+        'SD': ['San Diego', 'CA'],
+        'SEA':[ 'Seattle', 'WA'],
+        'SF': ['San Francisco', 'CA'],
+        'STL':[ 'St. Louis', 'MO'],
+        'TB': ['Tampa', 'FL'],
+        'TEX':[ 'Arlington', 'TX'],
+        'TOR':[ 'Toronto', 'ON'],
+        'WSH':[ 'Washington', 'DC']
     }
-
-    df['city'] = df['player_id'].map(city_map)
-    df.to_csv(f'Data/{df_name}', index=False)
+    df['city'] = df['player_id'].map(lambda x: city_map[x][0])
+    df['state'] = df['player_id'].map(lambda x: city_map[x][1])
+    return df
 
 
 
@@ -77,7 +77,9 @@ def main():
 
     path = argv[1]
     df_name = argv[2]
-    clean_weather(path, df_name)
+    df = clean_weather(path, df_name)
+    df.to_csv(df_name, index=False)
+
 
 if __name__ == '__main__':
     main()

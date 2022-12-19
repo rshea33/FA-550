@@ -35,7 +35,8 @@ def clean(df):
         'effective_speed',
         'release_spin_rate',
         'release_extension',
-        'spin_axis'
+        'spin_axis', 
+        'delta_home_win_exp'
     ]
 
     data = df[relevant_columns]

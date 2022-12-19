@@ -1,0 +1,51 @@
+---
+title: "A Quantitative Analysis of MLB Baseball"
+author: "Ryan Shea"
+date: "12/18/2022"
+output: html_document
+---
+
+## Inspiration
+
+As an avid baseball player and fan, I am excited to explore the world of data analysis in the sport. With a background in data analysis and a strong interest in machine learning, I believe I have the skills and knowledge to create something innovative and unique. My passion for sabermetrics and curiosity about potential trends in baseball data make this project particularly appealing to me. Through this project, I hope to not only gain valuable experience in data science, but also uncover interesting insights about the game I love. As a bonus, I had the opportunity to develop a pitch execution model, which I believe has the potential to be further built upon in the future. This execution model is something that I have never seen before.
+
+## Questions
+
+#### 1. What attributes are most important in an effective slider?
+
+#### 2. Which counts are generally the most important counts in terms of winning games?
+
+#### 3. How do the different parts of the season affect certain statistics of the game?
+
+## Data
+
+The data I used was from Baseball Savant. For Question 1, I used Jacob deGrom's 2022 season as he has one of the best
+sliders in the game. For Question 2, I used the 2022 season. I manipulated the dataframes and wrote a script
+in order to isolate each count. For Question 3, I used the 2022 season, but this time, I isolated each month and
+looked at the statistics for each month.
+
+## Methods
+
+I employed a range of visualization techniques to effectively convey my findings. To answer the first research question, I utilized an XGBoost classification model and derived the most important features using SHapley Additive exPlanations (SHAP). To visually represent this information, I selected a SHAP summary plot and a scatter plot of the x and y coordinates of the slider, with the probability of the slider being executed represented by the color mapping. I chose the SHAP summary plot for its ease of interpretation and the scatter plot to show the relationship between the coordinates and probability.
+
+To address the second research question, I again utilized an XGBoost regression model and obtained SHAP values. I utilized a SHAP summary plot for the same reasons as before, and also used a scatter plot with a low alpha to depict the density of pitches thrown in each count. I supplemented these visualizations with a bar plot showing the mean absolute difference in win expectancy for each count, highlighting the counts with the highest change in win expectancy.
+
+Finally, to examine changes in statistics by state and month, I used Tableau's map visualizations to showcase batting average and pitch velocity. These visualizations allowed me to quickly and easily depict patterns in the data and were particularly useful due to the potential variation in statistics across states. Overall, I carefully selected and utilized a range of visualization tools to effectively convey my findings and answer the research questions posed.
+
+## Conclusions
+
+#### 1. The most important features for an effective slider are the x and y coordinates.
+
+The most significant factors influencing the effectiveness of a slider are the x and y coordinates. This aligns with my expectations, as command is a crucial element of successful pitching. Although the selection of these features was somewhat biased (based on my own experiences as a high-level player), I believe that they are reasonable biases that any experienced player would consider.
+
+#### 2. The most important counts are 2 strike counts.
+
+The counts with the greatest impact are 2 strike counts. This is consistent with my expectations, as these are "high-leverage" counts that are likely to result in a hit or an out.
+
+#### 3. Pitch velocity and batting average trend up as the season progresses.
+
+This is what surprised me the most, as I would have expected the pitchers and hitters alike be ready from the start. Granted, the differences are not as pronounced as I would have expected, but it is still interesting to see. The spike in velocity in October is really interesting as it implies that they are amped for the playoffs and give it something extra.
+
+## Future Work
+
+Moving forward, I am eager to continue exploring the potential of my pitch execution model and its potential to revolutionize the game of baseball. This model represents an exciting opportunity to bring new insights and approaches to the sport, and I am committed to continuing to develop and refine it. I believe that this work has the potential to significantly impact the way that baseball is played and analyzed, and I am committed to pursuing it to the best of my ability.
